@@ -6,7 +6,7 @@ My focus of this project is to look at the trend of the amount of food provided 
 
 ## Data Source and Variables of Interest 
 
-Data was provided by UMD (Urban Ministry of Durham). The data is consisted of 79838 observations and 13 variables (5 categorical variables and 8 numerical variables) from years 1931 to 2019. I think the variables Date, Food Pounds, and Clothing Items will be useful for the question that I am hoping to address in this project.  
+Data was provided by UMD (Urban Ministry of Durham). The data is consisted of 79838 observations and 13 variables (5 categorical variables and 8 numerical variables) from years 1931 to 2019. I think the variables Date, Food Pounds, and Food Provided for will be useful for the question that I am hoping to address in this project.  
 
 ## Analysis Approach
 

@@ -9,13 +9,13 @@ output:
 
 ## Background 
 
-The data was provided by UMD (Urban Ministry of Durham). Established in 1983, Urban Ministries of Durham works holistically to end homelessness and meet the emergency needs of very poor and hungry neighbors through its programs and in partnership with other nonprofits. UMD is a private, 501(c) 3 non-profit organization governed by a volunteer Board of Directors from the community. UMD offers food, shelter and a future to about 6,000 men, women and children annually. 
+The data was provided by UMD (Urban Ministry of Durham). Established in 1983, Urban Ministries of Durham works holistically to end homelessness and meet the emergency needs of very poor and hungry neighbors through its programs and in partnership with other nonprofits. UMD offers food, shelter and a future to about 6,000 men, women and children annually. 
 
-The data consists of 79838 observations and 13 variables (5 categorical variables and 8 numerical variables) from 1931 to 2019. However, since UMD was not established till 1983, I removed the observations with date prior to 1983. For this project, I used the variables 'Date' and 'Food Pounds'.  
+The data consists of 79838 observations and 13 variables (5 categorical variables and 8 numerical variables) from 1931 to 2019. However, since UMD was not established till 1983, I removed the observations with Date prior to 1983. For this project, I am using the variables 'Date' and 'Food Pounds'.  
 
 ## Research Question  
 
-My focus of this project is to look at the amount of food provided by UMD along with its trend in three seperate time periods: before 2000, between 2000 and 2010, and on and after 2010.  
+My focus of this project is to look at the amount of food provided by UMD along with its trend in three seperate time periods: before 2000, between 2000 and 2009, and after 2009.  
 
 
 ```{r setup, include=FALSE}
@@ -137,13 +137,21 @@ ggplot(dat.food.before.2000,aes(x=dat.food.before.2000$Date, y=dat.food.before.2
   geom_smooth() + 
   ggtitle("Amount of Food Distributed over Time Before 2000 (lbs)") +
   xlab("Date") + ylab("Amount of Food Distributed (lbs)")
+```  
 
+### Before 2000, the amount of food distributed in pounds by UMD first went up till 1991, then went down and reached its minimum in between 1994 and 1995, and then started going up again.  
+
+```{r echo=F}
 ggplot(dat.food.2000to2009,aes(x=dat.food.2000to2009$Date, y=dat.food.2000to2009$`Food Pounds`)) +
   geom_point() + 
   geom_smooth() + 
   ggtitle("Amount of Food Distributed over Time between 2000 and 2009 (lbs)") +
   xlab("Date") + ylab("Amount of Food Distributed (lbs)")
+```  
 
+### Between 2000 and 2009, the amount of food distributed first went down, reaching its minimum in about 2005, and was faily steady afterwards. 
+
+```{r echo=F}
 ggplot(dat.food.after2009,aes(x=dat.food.after2009$Date, y=dat.food.after2009$`Food Pounds`)) +
   geom_point() + 
   geom_smooth() + 
@@ -151,10 +159,7 @@ ggplot(dat.food.after2009,aes(x=dat.food.after2009$Date, y=dat.food.after2009$`F
   xlab("Date") + ylab("Amount of Food Distributed (lbs)")
 ```   
 
-### Before 2000, the amount of food distributed in pounds by UMD first went up till 1991, then went down and reached its minimum in between 1994 and 1995, and then started going up again.  
-
-### Between 2000 and 2009, the amount of food distributed first went down, reaching its minimum in about 2005, and was faily steady afterwards.  
-
 ### After 2009, the amount of food distributed showed an overall increasing trend, with slight fluctuations.   
+
 
 ### From the numerical summaries and the plots, we observe that the total amount of food provided by UMD has been increasing in large magnitude. However, within each time period, there were fluctuations in the amount of food distributed by UMD. Perhaps in the future, we can conduct further analysis to identify the causes of these fluctuations.     
