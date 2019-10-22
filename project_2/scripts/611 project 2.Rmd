@@ -1,0 +1,89 @@
+---
+title: "BIOS 611 Project 2"
+author: "Xinran Chu"
+date: "10/21/2019"
+output: ioslides_presentation
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(shiny)
+library(tidyverse)
+library(knitr)
+library(ggplot2)
+library(hexbin)
+
+dat = read_tsv("https://raw.githubusercontent.com/biodatascience/datasci611/gh-pages/data/project1_2019/UMD_Services_Provided_20190719.tsv")
+
+dat = dat[ , -c(2,3,4,5,8,9,10,11,12,13,14,15,16,17,18)]
+
+dat$Date =  as.Date(dat$Date,'%m/%d/%Y')
+
+dat.food = dat[ ,-2]
+```
+
+## Background 
+
+The data was provided by UMD (Urban Ministry of Durham). Established in 1983, Urban Ministries of Durham works holistically to end homelessness and meet the emergency needs of very poor and hungry neighbors through its programs and in partnership with other nonprofits. UMD offers food, shelter and a future to about 6,000 men, women and children annually. 
+
+The data consists of 79838 observations and 13 variables (5 categorical variables and 8 numerical variables) from 1931 to 2019. However, since UMD was not established till 1983, I removed the observations with Date prior to 1983. For this project, I am using the variables 'Date' and 'Food Pounds'. 
+
+## Research Question  
+
+My focus of this project is to look at the amount of food provided by UMD along with its trend over the years.  
+
+```{r }
+ui = fluidPage(
+  sliderInput(inputId = "year",
+    label = "Choose a year",
+    value = 2000, min = 1983, max = 2019),
+  plotOutput("density")
+)
+
+server = function(input, output){
+  output$density = renderPlot({
+    title = "Amount of Food (lbs) Distributed over Time"
+    ggplot(dat.food, aes(x=dat.food, y=dat.food$`Food Pounds`)) +
+    geom_point() + 
+    geom_smooth() + 
+    xlab("Date") + ylab("Amount of Food Distributed (lbs) over the years")
+  })
+}
+
+shinyApp(ui = ui, server = server)
+```  
+
+## Interactive Plot
+
+```{r eruptions}
+inputPanel(
+  selectInput("n_breaks", label = "Number of bins:",
+              choices = c(10, 20, 35, 50), selected = 20),
+  
+  sliderInput("bw_adjust", label = "Bandwidth adjustment:",
+              min = 0.2, max = 2, value = 1, step = 0.2)
+)
+
+renderPlot({
+  hist(faithful$eruptions, probability = TRUE, breaks = as.numeric(input$n_breaks),
+       xlab = "Duration (minutes)", main = "Geyser eruption duration")
+  
+  dens <- density(faithful$eruptions, adjust = input$bw_adjust)
+  lines(dens, col = "blue")
+})
+```
+
+## Bullets
+
+- Bullet 1
+- Bullet 2
+- Bullet 3
+
+## R Output
+
+```{r cars}
+summary(cars)
+```
+
+
