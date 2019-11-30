@@ -1,5 +1,5 @@
-.PHONY: project3
+.PHONY: project_3
 project3:
-	docker image build -t project3 .
-	python data_process.py
-	Rscript plots.R
+	docker image build -t project_3 .
+	python data_wrangling.py
+	Rscript plot.R
