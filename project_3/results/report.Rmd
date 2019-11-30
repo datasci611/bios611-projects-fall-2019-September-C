@@ -1,0 +1,189 @@
+---
+title: "BIOS 611 Project 3"
+author: "Xinran Chu"
+date: "11/23/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggplot2)
+
+## Read the dataset that was wrangled using Python
+dat = read_tsv("/Users/September/Documents/GitHub/bios611-projects-fall-2019-September-C/project_3/data/new_dataset.tsv")
+dat = dat[, -1]
+```  
+
+
+## Background 
+The data was provided by UMD (Urban Ministry of Durham). Established in 1983, Urban Ministries of Durham works holistically to end homelessness and meet the emergency needs of very poor and hungry neighbors through its programs and in partnership with other nonprofits. UMD is a private, 501(c) 3 non-profit organization governed by a volunteer Board of Directors from the community. UMD offers food, shelter and a future to about 6,000 men, women and children annually. 
+
+## Datasets used 
+For this project, I selected several datasets provided by UMD, including the following along with the variables I used: 
+
+* CLIENT: EE Provider ID, Client ID, Client Age at Entry, Client Gender, Client Primary Race, Client Ethnicity, Client      Veteran Status. 
+* ENTRY_EXIT: Client ID, Entry Date, Exit Date, Destination, Reason for Leaving. 
+* INCOME_ENTRY: Client ID, Monthly Amount (Entry). 
+* NONCASH_ENTRY: Client ID, Receiving Benefit (Entry). 
+* DISABILITY_ENTRY: Client ID, Disability Determination (Entry). 
+
+## Questions Explored in this Project 
+* Look at some summary statistics. 
+* The pattern of destinations after and reasons for leaving the shelter. 
+* How the length of stay relates to client demographics, specifically with respect to client's age, gender, income at      entry, and number of noncash services at entry. 
+
+### Summary statistics based on gender 
+```{r }
+# Subset based on client's gender
+female = subset(dat, dat$`Client Gender` == "Female")
+male = subset(dat, dat$`Client Gender` == "Male")
+female = female[-which(is.na(female$`Days Stayed` == "TRUE")), ]
+male = male[-which(is.na(male$`Days Stayed` == "TRUE")), ]
+
+summary(female)
+summary(male)
+```  
+
+### Summary statistics based on age (below and over 50) 
+```{r }
+over_50 = subset(dat, dat$`Client Age at Entry` >= 50)
+below_50 = subset(dat, dat$`Client Age at Entry` < 50)
+
+summary(over_50)
+summary(below_50)
+```  
+
+### Summary statistics based on age (below and over 50) 
+```{r }
+over_50 = subset(dat, dat$`Client Age at Entry` >= 50)
+below_50 = subset(dat, dat$`Client Age at Entry` < 50)
+
+summary(over_50)
+summary(below_50)
+```  
+
+### Summary statistics based on primary race
+```{r }
+white = subset(dat, dat$`Client Primary Race` == "White (HUD)")
+black = subset(dat, dat$`Client Primary Race` == "Black or African American (HUD)")
+
+summary(white)
+summary(black)
+```  
+
+
+### Summary statistics based on primary race
+```{r }
+white = subset(dat, dat$`Client Primary Race` == "White (HUD)")
+black = subset(dat, dat$`Client Primary Race` == "Black or African American (HUD)")
+
+summary(white)
+summary(black)
+```  
+
+### Summary statistics based on ethnicity
+```{r }
+non_his_lat = subset(dat, dat$`Client Ethnicity` == "Non-Hispanic/Non-Latino (HUD)")
+
+his_lat = subset(dat, dat$`Client Ethnicity` == "Hispanic/Latino (HUD)")
+
+no_data = subset(dat, dat$`Client Ethnicity` == "Data not collected (HUD)")
+
+refused = subset(dat, dat$`Client Ethnicity` == "Client refused (HUD)")
+
+unknown = subset(dat, dat$`Client Ethnicity` == "Client doesn't know (HUD)")
+
+summary(non_his_lat)
+summary(his_lat)
+summary(no_data)
+summary(refused)
+summary(unknown)
+```  
+
+### Summary statistics based on veteran status 
+```{r }
+y_vet =  subset(dat, dat$`Client Veteran Status` == "Yes (HUD)")
+n_vet =  subset(dat, dat$`Client Veteran Status` == "No (HUD)")
+na_vet = subset(dat, dat$`Client Veteran Status` == "Data not collected (HUD)")
+
+summary(y_vet)
+summary(n_vet)
+summary(na_vet)
+```  
+
+
+### Destinations of clients after leaving the shelter  
+```{r }
+unique(dat$Destination)
+``` 
+
+### Reasons for leaving the shelter 
+```{r }
+unique(dat$`Reason for Leaving`)
+```   
+
+## Explore how the length of stay relates to client demographics  
+```{r }
+# Extract number of days from the character type variable `Days Stayed` and cast it into int
+library(stringr)
+numextract <- function(string){ 
+  str_extract(string, "\\-*\\d+\\.*\\d*")
+} 
+
+days_stayed = numextract(dat$`Days Stayed`)
+days_stayed = as.numeric(days_stayed)
+dat$`Days Stayed` = days_stayed
+```   
+
+### Explore the pattern of the length of stay with respect client's age and gender. 
+```{r warning=FALSE}
+ggplot(dat, mapping = aes(x = dat$`Client Age at Entry`, y = dat$`Days Stayed`, 
+                        group = dat$`Client Gender`, color = dat$`Client Gender`, legend = dat$`Client Gender`)) + 
+  geom_violin() + 
+  theme(legend.text = element_text(size = 8), legend.position = 'bottom') + 
+  labs(title = "Violin plot for the length of stay with respect client's age and gender") + 
+  xlab("Client's Age at Entry") + 
+  ylab("Lenght of Stay (days)")
+
+ggsave('/Users/September/Documents/GitHub/bios611-projects-fall-2019-September-C/project_3/results/age_gender.png', height=4, width=7)
+```  
+
+#### Observations 
+
+* For male clients, the length of stay is the longest for those around 45 to 50 years old. 
+* For female clients, the length of stay is the longest for those around 45 to 55 years old. 
+* For trans female clients, the length of stay is the longest for those around 35 to 45 years old. 
+
+### Explore the pattern of the length of stay with respect client's income at entry. 
+```{r warning=FALSE}
+ggplot(dat %>% filter(`Monthly Amount (Entry)` < 30000),
+       mapping = aes(x = `Monthly Amount (Entry)`, y = `Days Stayed`)) + 
+  geom_point() + 
+  labs(title = "Scatter Plot for length of stay and income at entry")+ 
+  xlab("Monthly Income at Entry")+
+  ylab("Lenght of Stay (days)")
+
+ggsave('/Users/September/Documents/GitHub/bios611-projects-fall-2019-September-C/project_3/results/stay_income.png', height=4, width=7)
+```    
+
+#### Observations 
+
+We observe a negative association between client's monthly income at time of entry and their length of staying at the shelter. 
+
+### Explore the pattern of the length of stay with respect client's number of noncash services at entry. 
+```{r warning=FALSE}
+ggplot(dat,mapping = aes(x = `Number of Noncash at Entry`, y = `Days Stayed`)) + 
+  geom_point() + 
+  labs(title = "Scatter plot for length of stay and number of noncash services at entry")+ 
+  xlab("Number of Noncash at Entry")+
+  ylab("Lenght of Stay (days)")
+
+ggsave('/Users/September/Documents/GitHub/bios611-projects-fall-2019-September-C/project_3/results/stay_noncash.png', height=4, width=7)
+```  
+
+#### Observations 
+
+We observe a negative association between client's number of noncash services at time of entry and their length of staying at the shelter. 
+
+
