@@ -14,10 +14,10 @@ For this project, I selected several datasets provided by UMD, including the fol
 * NONCASH_ENTRY: Client ID, Receiving Benefit (Entry). 
 * DISABILITY_ENTRY: Client ID, Disability Determination (Entry). 
 
-## Questions Explored 
-* How the length of stay relates to client demographics. 
-* Destinations and reasons for leaving. 
-* How does client recurrence relate to clients who are chronically homeless, youth who age out of the foster care system,   and other demographics/community trends? 
+## Questions Explored in this Project 
+* Look at some summary statistics. 
+* The pattern of destinations after and reasons for leaving the shelter. 
+* How the length of stay relates to client demographics, specifically with respect to client's age, gender, income at      entry, and number of noncash services at entry. 
 
 ## Methods of Analysis 
 * Use a Docker container that has both R and Python installed. 
