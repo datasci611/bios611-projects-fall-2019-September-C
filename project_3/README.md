@@ -25,3 +25,4 @@ For this project, I selected several datasets provided by UMD, including the fol
 * Use R for data analysis and visualization. 
 * Use Makefile to run and compile all the programs. 
 
+#### To run the project, please git clone my github folder project_3, navigate to the project_3 folder and then type "make". 
