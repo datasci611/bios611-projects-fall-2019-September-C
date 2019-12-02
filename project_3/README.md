@@ -19,7 +19,7 @@ For this project, I selected several datasets provided by UMD, including the fol
 * Look at all the destinations after and reasons for leaving the shelter. 
 * How the length of stay relates to client demographics, specifically with respect to client's age, gender, income at       entry, and number of noncash services at entry. 
 
-## Methods of Analysis 
+## Methods of Analysis and Tools Used 
 * Use a Docker container that has both R and Python installed. 
 * Use Python for data wrangling. 
 * Use R for data analysis and visualization. 
