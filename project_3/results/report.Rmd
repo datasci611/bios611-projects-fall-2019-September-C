@@ -13,6 +13,16 @@ library(ggplot2)
 ## Read the dataset that was wrangled using Python
 dat = read_tsv("/Users/September/Documents/GitHub/bios611-projects-fall-2019-September-C/project_3/data/new_dataset.tsv")
 dat = dat[, -1]
+
+# Extract number of days from the character type variable `Days Stayed` and cast it into int
+library(stringr)
+numextract <- function(string){ 
+  str_extract(string, "\\-*\\d+\\.*\\d*")
+} 
+
+days_stayed = numextract(dat$`Days Stayed`)
+days_stayed = as.numeric(days_stayed)
+dat$`Days Stayed` = days_stayed
 ```  
 
 
@@ -124,17 +134,24 @@ unique(dat$`Reason for Leaving`)
 ```   
 
 ## Explore how the length of stay relates to client demographics  
-```{r }
-# Extract number of days from the character type variable `Days Stayed` and cast it into int
-library(stringr)
-numextract <- function(string){ 
-  str_extract(string, "\\-*\\d+\\.*\\d*")
-} 
 
-days_stayed = numextract(dat$`Days Stayed`)
-days_stayed = as.numeric(days_stayed)
-dat$`Days Stayed` = days_stayed
-```   
+### The distribution of client't age and gender at time of entry. 
+```{r }
+ggplot(data = dat, mapping = aes(x = `Client Age at Entry`)) + 
+  geom_bar(mapping = aes(colour = `Client Gender`))+ 
+  theme(legend.text = element_text(size = 8), legend.position = 'bottom') + 
+  labs(title = "Plot of Client's Age and Gender at Entry") + 
+  xlab("Client's Age at Entry") + 
+  ylab("Frenquency")
+
+ggsave('/Users/September/Documents/GitHub/bios611-projects-fall-2019-September-C/project_3/results/gender_age.png', height=4, width=7)
+```  
+
+#### Observations 
+
+* First of all, we observe that the majority of the clients are male. 
+* Most clients at the time of entry were around 40-60 years old. 
+* The age range that has most female clients is between 45-50 years old. 
 
 ### Explore the pattern of the length of stay with respect client's age and gender. 
 ```{r warning=FALSE}
@@ -142,7 +159,7 @@ ggplot(dat, mapping = aes(x = dat$`Client Age at Entry`, y = dat$`Days Stayed`,
                         group = dat$`Client Gender`, color = dat$`Client Gender`, legend = dat$`Client Gender`)) + 
   geom_violin() + 
   theme(legend.text = element_text(size = 8), legend.position = 'bottom') + 
-  labs(title = "Violin plot for the length of stay with respect client's age and gender") + 
+  labs(title = "Violin plot for the length of stay vs. client's age and gender") + 
   xlab("Client's Age at Entry") + 
   ylab("Lenght of Stay (days)")
 
@@ -155,25 +172,25 @@ ggsave('/Users/September/Documents/GitHub/bios611-projects-fall-2019-September-C
 * For female clients, the length of stay is the longest for those around 45 to 55 years old. 
 * For trans female clients, the length of stay is the longest for those around 35 to 45 years old. 
 
-### Explore the pattern of the length of stay with respect client's income at entry. 
+### Explore the pattern of the length of stay vs. client's income and at entry (grouped by gender). 
+
 ```{r warning=FALSE}
 ggplot(dat %>% filter(`Monthly Amount (Entry)` < 30000),
-       mapping = aes(x = `Monthly Amount (Entry)`, y = `Days Stayed`)) + 
+       mapping = aes(x = `Monthly Amount (Entry)`, y = `Days Stayed`, colour = `Client Gender`)) + 
   geom_point() + 
-  labs(title = "Scatter Plot for length of stay and income at entry")+ 
-  xlab("Monthly Income at Entry")+
-  ylab("Lenght of Stay (days)")
+  labs(title = "Scatterplot for staying days and income at entry")
 
-ggsave('/Users/September/Documents/GitHub/bios611-projects-fall-2019-September-C/project_3/results/stay_income.png', height=4, width=7)
+ggsave('/Users/September/Documents/GitHub/bios611-projects-fall-2019-September-C/project_3/results/stay_income.png', height=4, width=8)
 ```    
 
 #### Observations 
 
-We observe a negative association between client's monthly income at time of entry and their length of staying at the shelter. 
+* We observe a negative association between client's monthly income at time of entry and their length of staying at the shelter. 
+* Female clients cluster toward the lower incomes.  
 
-### Explore the pattern of the length of stay with respect client's number of noncash services at entry. 
+### Explore the pattern of the length of stay vs. client's number of noncash services at time of entry (grouped by gender) 
 ```{r warning=FALSE}
-ggplot(dat,mapping = aes(x = `Number of Noncash at Entry`, y = `Days Stayed`)) + 
+ggplot(dat,mapping = aes(x = `Number of Noncash at Entry`, y = `Days Stayed`, colour = `Client Gender`)) + 
   geom_point() + 
   labs(title = "Scatter plot for length of stay and number of noncash services at entry")+ 
   xlab("Number of Noncash at Entry")+

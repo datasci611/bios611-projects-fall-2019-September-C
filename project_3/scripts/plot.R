@@ -15,12 +15,20 @@ days_stayed = numextract(dat$`Days Stayed`)
 days_stayed = as.numeric(days_stayed)
 dat$`Days Stayed` = days_stayed
 
+# Explore the distribution of client't age and gender at time of entry. 
+ggplot(data = dat, mapping = aes(x = dat$`Client Age at Entry`)) + 
+  geom_bar(mapping = aes(colour = `Client Gender`))+ 
+  theme(legend.text = element_text(size = 8), legend.position = 'bottom') + 
+  labs(title = "Plot of Client's Age and Gender at Entry") + 
+  xlab("Client's Age at Entry") + 
+  ylab("Frenquency")
+
 # Explore the pattern of the length of stay with respect client's age and gender. 
 ggplot(dat, mapping = aes(x = dat$`Client Age at Entry`, y = dat$`Days Stayed`, 
                           group = dat$`Client Gender`, color = dat$`Client Gender`, legend = dat$`Client Gender`)) + 
   geom_violin() + 
   theme(legend.text = element_text(size = 8), legend.position = 'bottom') + 
-  labs(title = "Violin plot for the length of stay with respect client's age and gender") + 
+  labs(title = "Violin plot for the length of stay vs. client's age and gender") + 
   xlab("Client's Age at Entry") + 
   ylab("Lenght of Stay (days)")
 
