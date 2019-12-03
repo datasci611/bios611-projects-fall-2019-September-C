@@ -174,8 +174,5 @@ df4.head()
 df3.to_csv('/Users/September/Documents/GitHub/bios611-projects-fall-2019-September-C/project_3/data/new_dataset.tsv', sep = '\t')
 
 
-# In[ ]:
 
-
-# How does length of stay relate to client demographics
 
